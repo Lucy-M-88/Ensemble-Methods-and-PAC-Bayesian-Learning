@@ -237,6 +237,14 @@ They include:
 - Minority-class proportions across datasets.
 - Performance comparison by imbalance group.
 
+### Complementary analyses (bagging-vs-boosting, stacking-vs-members, CD diagrams)
+
+```bash
+python code/analyse_extra.py --bvb        # Bagging vs AdaBoost, per dataset
+python code/analyse_extra.py --cd         # Demšar CD diagrams (4 metrics)
+python code/analyse_extra.py --stacking   # Stacking vs its members (~20-30 min)
+python code/analyse_extra.py --all --no-stacking   # everything except the slow group
+
 ---
 
 ## 4. Part 2 — PAC-Bayesian Learning
@@ -267,6 +275,7 @@ python code/analyse_results.py          # reads baseline_results.csv
 python code/analyse_imbalance.py        # reads baseline_results.csv
 python code/dataset_analysis.py         # produces dataset_summary.csv
 python code/make_figures.py             # reads baseline_results.csv
+python code/analyse_extra.py --all --no-stacking
 ```
 
 The ordering matters: `analyse_results.py`, `analyse_imbalance.py` and `make_figures.py` all read `results/baseline_results.csv` produced by `benchmark_part1.py`, so the benchmark must be run first.
@@ -283,44 +292,61 @@ For exact dependency versions, the project can also provide a `requirements-lock
 
 ## 6. Results
 
-The experimental results show that ensemble methods generally outperform both the standalone Decision Tree baseline and the non-tree baselines (Logistic Regression, k-NN).
+The experimental results show that ensemble methods generally outperform both
+the standalone Decision Tree baseline and the non-tree baselines (Logistic
+Regression, k-NN).
 
 ### Global ranking (mean over 22 datasets)
 
 | Model | Accuracy | Balanced Acc. | Minority F1 | ROC AUC | Fit time (s) |
 |---|---|---|---|---|---|
-| Stacking | **0.9029** | 0.8393 | 0.7709 | **0.9359** | 10.68 |
-| RandomForest | 0.9018 | 0.8378 | 0.7716 | 0.9341 | 0.45 |
-| HistGradientBoosting | 0.8986 | **0.8436** | **0.7806** | 0.9291 | 0.36 |
-| AdaBoost | 0.8970 | 0.8328 | 0.7551 | 0.9241 | 0.38 |
-| GradientBoosting | 0.8956 | 0.8382 | 0.7715 | 0.9283 | 1.56 |
-| Bagging | 0.8891 | 0.8182 | 0.7369 | 0.9226 | 2.64 |
-| LogisticRegression | 0.8792 | 0.7949 | 0.6961 | 0.8969 | 0.02 |
-| KNN | 0.8652 | 0.8020 | 0.7277 | 0.8879 | 0.01 |
-| DecisionTree | 0.8602 | 0.7968 | 0.7041 | 0.8530 | 0.02 |
+| Stacking              | **0.9029** | 0.8393 | 0.7709 | **0.9359** | 4.70 |
+| RandomForest          | 0.9018 | 0.8378 | 0.7716 | 0.9341 | 0.18 |
+| HistGradientBoosting  | 0.8986 | **0.8436** | **0.7806** | 0.9291 | 0.14 |
+| AdaBoost              | 0.8970 | 0.8328 | 0.7551 | 0.9241 | 0.20 |
+| GradientBoosting      | 0.8956 | 0.8382 | 0.7715 | 0.9283 | 0.78 |
+| Bagging               | 0.8893 | 0.8183 | 0.7364 | 0.9224 | 1.28 |
+| LogisticRegression    | 0.8792 | 0.7949 | 0.6961 | 0.8969 | 0.006 |
+| KNN                   | 0.8652 | 0.8020 | 0.7277 | 0.8879 | 0.002 |
+| DecisionTree          | 0.8602 | 0.7968 | 0.7041 | 0.8530 | 0.010 |
 
 ### Cost–performance trade-off
 
-Stacking achieves the best raw scores, but at a cost ~24× higher than RandomForest and ~500× higher than LogisticRegression (fit time), which must be taken into account when choosing a model in practice. HistGradientBoosting is the best compromise: best balanced_accuracy and minority F1, and the second-lowest fit time among ensembles.
+Stacking achieves the best raw scores, but at a cost ~27× higher than
+RandomForest and ~750× higher than LogisticRegression (fit time), which must
+be taken into account when choosing a model in practice. HistGradientBoosting
+is the best compromise: best balanced_accuracy and minority F1, and one of the
+lowest fit times among ensembles.
 
 ### Effect of class imbalance
 
-Splitting the datasets into *Imbalanced* (< 30% minority, 8 datasets) and *Other* (≥ 30%, 14 datasets) reveals a reordering:
+Splitting the datasets into *Imbalanced* (< 30% minority, 8 datasets) and
+*Other* (≥ 30%, 14 datasets) reveals a reordering:
 
 - On *balanced* datasets, **Stacking** dominates all metrics (avg. rank ≈ 2.8–3.2).
-- On *imbalanced* datasets, **HistGradientBoosting** and **RandomForest** take the lead on balanced_accuracy / minority F1, and Stacking drops to 4th place on accuracy (avg. rank 4.06). This suggests that the stacking meta-model, trained on OOF probabilities biased toward the majority class, does not fully transfer to imbalanced regimes.
+- On *imbalanced* datasets, **HistGradientBoosting** and **RandomForest** take
+  the lead on balanced_accuracy / minority F1, and Stacking drops to 4th place
+  on accuracy (avg. rank 4.06). This suggests that the stacking meta-model,
+  trained on OOF probabilities biased toward the majority class, does not
+  fully transfer to imbalanced regimes.
 
 ### Statistical tests
 
-Friedman tests are highly significant for all four metrics (p < 1e-6). Pairwise Wilcoxon with Holm correction shows that:
+Friedman tests are highly significant for all four metrics (p < 1e-6).
+Pairwise Wilcoxon with Holm correction shows that:
 
 - All ensembles significantly beat the Decision Tree.
-- No ensemble is **statistically** distinguishable from the best ensemble on accuracy (Stacking vs RF: Holm p = 1.00; vs HistGB: p = 1.00).
-- Stacking significantly outperforms AdaBoost on AUC (Holm p = 0.001) and RandomForest/Bagging on accuracy (Holm p < 0.01).
+- No ensemble is **statistically** distinguishable from the best ensemble on
+  accuracy (Stacking vs RF: Holm p = 1.00; vs HistGB: p = 1.00).
+- Stacking significantly outperforms AdaBoost on AUC (Holm p = 0.001) and
+  Bagging on accuracy / balanced_accuracy / minority_f1 (Holm p < 0.01).
 
 ### scikit-learn agreement
 
-The hand-written ensembles reproduce their scikit-learn counterparts with a maximum absolute difference of 0.019 (accuracy), 0.021 (balanced accuracy) and 0.006 (AUC) across the 8 compared datasets — confirming a correct implementation of Bagging-OOB, Discrete AdaBoost and Stacking.
+The hand-written ensembles reproduce their scikit-learn counterparts with a
+maximum absolute difference of 0.019 (accuracy), 0.021 (balanced accuracy) and
+0.006 (AUC) across the 8 compared datasets — confirming a correct
+implementation of Bagging-OOB, Discrete AdaBoost and Stacking.
 
 ---
 
