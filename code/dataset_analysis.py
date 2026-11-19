@@ -10,7 +10,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import benchkit as bk
 
 
-OUTPUT_DIR = Path("../results/tables")
+#OUTPUT_DIR = Path("../results/tables")
+OUTPUT_DIR = Path(__file__).resolve().parent.parent / "results" / "tables"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 DATASETS = bk.REAL_SMALL + bk.REAL_LARGE

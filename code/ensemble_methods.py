@@ -4,7 +4,6 @@ import numpy as np
 from sklearn.base import BaseEstimator, ClassifierMixin, clone
 from sklearn.metrics import accuracy_score, balanced_accuracy_score
 from sklearn.tree import DecisionTreeClassifier
-from scipy.special import softmax
 from sklearn.model_selection import StratifiedKFold
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
@@ -103,7 +102,7 @@ class BaggingOOBClassifier(ClassifierMixin, BaseEstimator):
         probabilities = self.predict_proba(X)
         return self.classes_[np.argmax(probabilities, axis=1)]
 
-
+"""
 class AdaBoostDiscreteClassifier(ClassifierMixin, BaseEstimator):
     def __init__(
         self,
@@ -207,7 +206,7 @@ class AdaBoostDiscreteClassifier(ClassifierMixin, BaseEstimator):
     def predict(self, X):
         scores = self.decision_function(X)
         return self.classes_[np.argmax(scores, axis=1)]
-
+"""
 
 class AdaBoostDiscreteClassifier(ClassifierMixin, BaseEstimator):
 

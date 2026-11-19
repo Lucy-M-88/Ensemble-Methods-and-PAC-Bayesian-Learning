@@ -65,7 +65,7 @@ for ax, metric in zip(axes, METRICS):
     ax.grid(axis="y", alpha=0.25)
 
 fig.suptitle(
-    "Average performance across 22 datasets",
+    "Average performance across {aggregated['dataset'].nunique()} datasets",
     fontsize=15,
 )
 fig.tight_layout()

@@ -1,0 +1,15 @@
+group,model,accuracy,balanced_accuracy,minority_f1,auc
+Imbalanced (<30%),AdaBoost,0.9346,0.7871,0.6334,0.9309
+Imbalanced (<30%),Bagging,0.9341,0.7666,0.6042,0.9336
+Imbalanced (<30%),DecisionTree,0.9249,0.7771,0.6002,0.8765
+Imbalanced (<30%),GradientBoosting,0.9425,0.8097,0.6862,0.9454
+Imbalanced (<30%),HistGradientBoosting,0.9434,0.817,0.7012,0.9442
+Imbalanced (<30%),RandomForest,0.9427,0.797,0.6753,0.9446
+Imbalanced (<30%),Stacking,0.9428,0.7979,0.669,0.9478
+Other (>=30%),AdaBoost,0.8756,0.859,0.8246,0.9201
+Other (>=30%),Bagging,0.8635,0.8457,0.8081,0.917
+Other (>=30%),DecisionTree,0.8232,0.8081,0.7635,0.8396
+Other (>=30%),GradientBoosting,0.8688,0.8545,0.8202,0.9186
+Other (>=30%),HistGradientBoosting,0.8729,0.8588,0.8259,0.9205
+Other (>=30%),RandomForest,0.8785,0.8611,0.8267,0.9281
+Other (>=30%),Stacking,0.8801,0.8629,0.8292,0.9291

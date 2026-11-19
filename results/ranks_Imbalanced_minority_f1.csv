@@ -1,0 +1,8 @@
+model,0
+AdaBoost,5.0625
+Bagging,5.0625
+DecisionTree,5.875
+GradientBoosting,2.875
+HistGradientBoosting,2.375
+RandomForest,3.125
+Stacking,3.625
