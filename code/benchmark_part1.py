@@ -1,6 +1,6 @@
-
 from pathlib import Path
 import sys
+import time
 
 import numpy as np
 import pandas as pd
@@ -10,6 +10,8 @@ from sklearn.model_selection import StratifiedKFold
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import (
     RandomForestClassifier,
     GradientBoostingClassifier,
@@ -32,9 +34,7 @@ from ensemble_methods import (
 )
 
 
-# --------------------------------------------------
 # Configuration
-# --------------------------------------------------
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 OUTPUT_DIR = PROJECT_ROOT / "results"
@@ -46,55 +46,45 @@ RANDOM_STATE = 42
 DATASETS = list(dict.fromkeys(bk.REAL_SMALL + bk.REAL_LARGE))
 
 MODELS = {
+    # --- Baselines
     "DecisionTree": DecisionTreeClassifier(
-        max_depth=5,
-        random_state=RANDOM_STATE,
+        max_depth=5, random_state=RANDOM_STATE,
     ),
+    "LogisticRegression": LogisticRegression(
+        max_iter=1000, random_state=RANDOM_STATE,
+    ),
+    "KNN": KNeighborsClassifier(n_neighbors=5),
+    # --- Ensembles
     "RandomForest": RandomForestClassifier(
-        n_estimators=200,
-        random_state=RANDOM_STATE,
-        n_jobs=-1,
+        n_estimators=200, random_state=RANDOM_STATE, n_jobs=-1,
     ),
     "Bagging": BaggingOOBClassifier(
-        n_estimators=200,
-        max_depth=5,
-        random_state=RANDOM_STATE,
+        n_estimators=200, max_depth=5, random_state=RANDOM_STATE,
     ),
     "AdaBoost": AdaBoostDiscreteClassifier(
-        n_estimators=100,
-        max_depth=1,
-        learning_rate=1.0,
+        n_estimators=100, max_depth=1, learning_rate=1.0,
         random_state=RANDOM_STATE,
     ),
     "Stacking": StackingClassifierCustom(
-        n_splits=5,
-        random_state=RANDOM_STATE,
+        n_splits=5, random_state=RANDOM_STATE,
     ),
     "GradientBoosting": GradientBoostingClassifier(
-        n_estimators=200,
-        learning_rate=0.1,
-        max_depth=3,
+        n_estimators=200, learning_rate=0.1, max_depth=3,
         random_state=RANDOM_STATE,
     ),
     "HistGradientBoosting": HistGradientBoostingClassifier(
-        max_iter=200,
-        learning_rate=0.1,
-        max_leaf_nodes=15,
+        max_iter=200, learning_rate=0.1, max_leaf_nodes=15,
         random_state=RANDOM_STATE,
     ),
 }
 
 
-# --------------------------------------------------
 # Evaluation
-# --------------------------------------------------
 
 def evaluate_dataset(name, X, y):
 
     cv = StratifiedKFold(
-        n_splits=N_SPLITS,
-        shuffle=True,
-        random_state=RANDOM_STATE,
+        n_splits=N_SPLITS, shuffle=True, random_state=RANDOM_STATE,
     )
 
     rows = []
@@ -112,172 +102,137 @@ def evaluate_dataset(name, X, y):
             )
 
         minority_class = min(
-            classes,
-            key=lambda c: np.mean(y_train == c)
+            classes, key=lambda c: np.mean(y_train == c)
         )
-
         positive_class = classes[1]
 
         for model_name, model_template in MODELS.items():
 
-            # Nouvelle instance pour chaque fold
             model = clone(model_template)
 
-            # Stacking gère son propre prétraitement interne.
-            # Les autres modèles utilisent un scaler ajusté
-            # uniquement sur les données d'entraînement.
             if model_name == "Stacking":
                 clf = model
             else:
-                clf = make_pipeline(
-                    StandardScaler(),
-                    model,
-                )
+                clf = make_pipeline(StandardScaler(), model)
 
-            # Entraînement
+            # --- Temps d'entraînement ---
+            t0 = time.perf_counter()
             clf.fit(X_train, y_train)
+            fit_time = time.perf_counter() - t0
 
-            # Récupération du modèle final pour les scores OOB
             fitted_model = (
-                clf.steps[-1][1]
-                if hasattr(clf, "steps")
-                else clf
+                clf.steps[-1][1] if hasattr(clf, "steps") else clf
             )
-
             oob_accuracy = getattr(
                 fitted_model, "oob_score_", np.nan
             )
-
             oob_balanced_accuracy = getattr(
-                fitted_model,
-                "oob_balanced_accuracy_",
-                np.nan,
+                fitted_model, "oob_balanced_accuracy_", np.nan
             )
 
-            # Prédictions
+            # --- Temps de prédiction (labels) ---
+            t0 = time.perf_counter()
             pred = clf.predict(X_test)
+            predict_time = time.perf_counter() - t0
 
-            # Probabilité associée à la classe positive
+            # --- Temps de predict_proba ---
+            t0 = time.perf_counter()
             probabilities = clf.predict_proba(X_test)
+            predict_proba_time = time.perf_counter() - t0
 
             fitted_classes = (
                 clf.classes_
                 if hasattr(clf, "classes_")
                 else clf[-1].classes_
             )
-
             positive_idx = np.where(
                 fitted_classes == positive_class
             )[0][0]
-
             scores = probabilities[:, positive_idx]
 
-            # Métriques
             rows.append({
                 "dataset": name,
                 "fold": fold,
                 "model": model_name,
 
-                "accuracy": accuracy_score(
-                    y_test, pred
-                ),
-
+                "accuracy": accuracy_score(y_test, pred),
                 "balanced_accuracy": balanced_accuracy_score(
                     y_test, pred
                 ),
-
                 "minority_f1": f1_score(
-                    y_test,
-                    pred,
+                    y_test, pred,
                     pos_label=minority_class,
                     zero_division=0,
                 ),
-
-                "auc": roc_auc_score(
-                    y_test,
-                    scores,
-                ),
+                "auc": roc_auc_score(y_test, scores),
 
                 "oob_accuracy": oob_accuracy,
-
                 "oob_balanced_accuracy": oob_balanced_accuracy,
+
+                # --- Coût computationnel ---
+                "fit_time": fit_time,
+                "predict_time": predict_time,
+                "predict_proba_time": predict_proba_time,
             })
 
     return rows
 
 
-# --------------------------------------------------
 # Main benchmark
-# --------------------------------------------------
 
 all_results = []
+failed_datasets = []
 
 for name in DATASETS:
-
     try:
         X, y = bk.real_dataset(name)
-
         X = np.asarray(X, dtype=float)
         y = np.asarray(y)
-
         results = evaluate_dataset(name, X, y)
-
         all_results.extend(results)
-
         print(f"[OK] {name}")
-
     except Exception as exc:
         print(f"[ERREUR] {name}: {exc}")
+        failed_datasets.append({"dataset": name, "error": str(exc)})
 
-
-# --------------------------------------------------
-# Save results
-# --------------------------------------------------
 
 df = pd.DataFrame(all_results)
-
 if df.empty:
-    raise RuntimeError(
-        "Aucun résultat obtenu. Vérifie les erreurs affichées."
-    )
+    raise RuntimeError("Aucun résultat obtenu.")
 
 results_file = OUTPUT_DIR / "baseline_results.csv"
-
 df.to_csv(results_file, index=False)
 
+if failed_datasets:
+    pd.DataFrame(failed_datasets).to_csv(
+        OUTPUT_DIR / "failed_datasets.csv", index=False,
+    )
+    print(f"\n{len(failed_datasets)} dataset(s) en échec — voir failed_datasets.csv")
 
-# --------------------------------------------------
+
+
 # Summary
-# --------------------------------------------------
 
 print("\nNombre de datasets réussis :",
       df["dataset"].nunique(), "/", len(DATASETS))
-
-print("\nNombre d'évaluations :",
-      len(df))
+print("Nombre d'évaluations :", len(df))
 
 print("\nRésultats moyens par modèle :")
-
 summary = df.groupby("model")[
-    [
-        "accuracy",
-        "balanced_accuracy",
-        "minority_f1",
-        "auc",
-    ]
+    ["accuracy", "balanced_accuracy", "minority_f1", "auc"]
 ].mean()
-
 print(summary.round(4))
 
-print("\nRésultats OOB :")
-
-oob_summary = df.groupby("model")[
-    [
-        "oob_accuracy",
-        "oob_balanced_accuracy",
-    ]
+print("\nCoût computationnel moyen par modèle (s) :")
+timing = df.groupby("model")[
+    ["fit_time", "predict_time", "predict_proba_time"]
 ].mean()
+print(timing.round(4))
 
+print("\nRésultats OOB :")
+oob_summary = df.groupby("model")[
+    ["oob_accuracy", "oob_balanced_accuracy"]
+].mean()
 print(oob_summary.round(4))
 
 print(f"\nRésultats sauvegardés dans : {results_file}")

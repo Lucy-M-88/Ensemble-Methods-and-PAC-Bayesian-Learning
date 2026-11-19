@@ -45,9 +45,7 @@ aggregated = (
 
 models = sorted(aggregated["model"].unique())
 
-# --------------------------------------------------
 # 1. Global performance comparison
-# --------------------------------------------------
 
 summary = aggregated.groupby("model")[METRICS].mean()
 
@@ -76,9 +74,7 @@ fig.savefig(
 )
 plt.close(fig)
 
-# --------------------------------------------------
 # 2. Average ranks
-# --------------------------------------------------
 
 fig, axes = plt.subplots(2, 2, figsize=(13, 9))
 axes = axes.ravel()
@@ -106,8 +102,9 @@ for ax, metric in zip(axes, METRICS):
     ax.set_xlabel("Average rank (lower is better)")
     ax.grid(axis="x", alpha=0.25)
 
+n_datasets = aggregated["dataset"].nunique()
 fig.suptitle(
-    "Average model ranks across datasets",
+    f"Average performance across {n_datasets} datasets",
     fontsize=15,
 )
 fig.tight_layout()
@@ -118,9 +115,7 @@ fig.savefig(
 )
 plt.close(fig)
 
-# --------------------------------------------------
 # 3. Dataset imbalance
-# --------------------------------------------------
 
 imbalance_rows = []
 
@@ -173,9 +168,7 @@ fig.savefig(
 )
 plt.close(fig)
 
-# --------------------------------------------------
 # 4. Performance by imbalance group
-# --------------------------------------------------
 
 results = aggregated.merge(
     imbalance[["dataset", "imbalanced"]],

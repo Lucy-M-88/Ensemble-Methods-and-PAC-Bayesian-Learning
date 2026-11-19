@@ -18,6 +18,7 @@ Ensemble-Methods-and-PAC-Bayesian-Learning/
 │   ├── benchkit.py
 │   ├── ensemble_methods.py
 │   ├── benchmark_part1.py
+│   ├── compare_with_sklearn.py
 │   ├── analyse_results.py
 │   ├── analyse_imbalance.py
 │   ├── make_figures.py
@@ -29,6 +30,8 @@ Ensemble-Methods-and-PAC-Bayesian-Learning/
 │
 ├── results/
 │   ├── baseline_results.csv
+│   ├── failed_datasets.csv
+│   ├── sklearn_comparison.csv
 │   ├── mean_performance.csv
 │   ├── friedman_results.csv
 │   ├── wilcoxon_holm_results.csv
@@ -86,6 +89,8 @@ Three ensemble learning methods are implemented:
 These methods are compared with the following reference classifiers:
 
 - Decision Tree
+- Logistic Regression
+- k-Nearest Neighbours
 - Random Forest
 - Gradient Boosting
 - HistGradientBoosting
@@ -110,6 +115,14 @@ The following metrics are reported:
 | Minority-class F1 | F1-score for the less frequent class |
 | ROC AUC | Area under the ROC curve |
 
+In addition, the following computational cost metrics are recorded per fold, in order to address the *"at what cost?"* question:
+
+| Metric | Description |
+|---|---|
+| `fit_time` | Wall-clock time of `fit` on the training fold (seconds) |
+| `predict_time` | Wall-clock time of `predict` on the test fold (seconds) |
+| `predict_proba_time` | Wall-clock time of `predict_proba` on the test fold (seconds) |
+
 ### Run the benchmark
 
 From the project root:
@@ -123,6 +136,34 @@ The benchmark results are saved to:
 ```text
 results/baseline_results.csv
 ```
+
+If any dataset fails to load or be evaluated, the script does **not** crash: the failing datasets and their error messages are written to:
+
+```text
+results/failed_datasets.csv
+```
+
+### Comparison with scikit-learn
+
+To check that the three hand-written implementations (`BaggingOOBClassifier`, `AdaBoostDiscreteClassifier`, `StackingClassifierCustom`) match their scikit-learn counterparts, run:
+
+```bash
+python code/compare_with_sklearn.py
+```
+
+The script trains, on a representative subset of 8 datasets and using the same 5-fold stratified splits, both the hand-written model and the equivalent scikit-learn model with strictly identical hyperparameters:
+
+- `BaggingOOBClassifier` ↔ `sklearn.ensemble.BaggingClassifier` (with `oob_score=True`)
+- `AdaBoostDiscreteClassifier` ↔ `sklearn.ensemble.AdaBoostClassifier(algorithm="SAMME")`
+- `StackingClassifierCustom` ↔ `sklearn.ensemble.StackingClassifier`
+
+The per-dataset scores and the absolute differences are saved to:
+
+```text
+results/sklearn_comparison.csv
+```
+
+and a summary (mean and max absolute difference on `accuracy`, `balanced_accuracy` and `auc`) is printed to the console.
 
 ### Statistical analysis
 
@@ -160,6 +201,20 @@ The results are saved in:
 - `dataset_imbalance.csv`
 - `imbalance_performance.csv`
 - Rank comparison CSV files for each group.
+
+### Dataset descriptive table
+
+To build the descriptive table of the datasets (number of examples, dimension, number of classes, minority proportion, imbalance flag), run:
+
+```bash
+python code/dataset_analysis.py
+```
+
+Results are saved to:
+
+```text
+results/tables/dataset_summary.csv
+```
 
 ### Generate figures
 
@@ -203,14 +258,18 @@ The corresponding experiments and results are documented in the project report a
 
 ## 5. Reproducibility
 
-To reproduce the Part 1 experiments, execute the following commands from the project root:
+To reproduce the Part 1 experiments, execute the following commands from the project root, in this order:
 
 ```bash
-python code/benchmark_part1.py
-python code/analyse_results.py
-python code/analyse_imbalance.py
-python code/make_figures.py
+python code/benchmark_part1.py          # produces baseline_results.csv (+ failed_datasets.csv)
+python code/compare_with_sklearn.py     # produces sklearn_comparison.csv
+python code/analyse_results.py          # reads baseline_results.csv
+python code/analyse_imbalance.py        # reads baseline_results.csv
+python code/dataset_analysis.py         # produces dataset_summary.csv
+python code/make_figures.py             # reads baseline_results.csv
 ```
+
+The ordering matters: `analyse_results.py`, `analyse_imbalance.py` and `make_figures.py` all read `results/baseline_results.csv` produced by `benchmark_part1.py`, so the benchmark must be run first.
 
 The benchmark uses fixed random seeds and stratified cross-validation to ensure consistent data splits and reproducible results.
 
@@ -224,18 +283,44 @@ For exact dependency versions, the project can also provide a `requirements-lock
 
 ## 6. Results
 
-The experimental results show that ensemble methods generally outperform the standalone Decision Tree baseline.
+The experimental results show that ensemble methods generally outperform both the standalone Decision Tree baseline and the non-tree baselines (Logistic Regression, k-NN).
 
-Across the evaluated datasets:
+### Global ranking (mean over 22 datasets)
 
-- Stacking achieves the highest average accuracy and ROC AUC.
-- HistGradientBoosting achieves the highest average balanced accuracy and minority-class F1-score.
-- Random Forest remains competitive across all metrics.
-- HistGradientBoosting obtains the best average ranks for balanced accuracy and minority-class F1 on the selected imbalanced datasets.
+| Model | Accuracy | Balanced Acc. | Minority F1 | ROC AUC | Fit time (s) |
+|---|---|---|---|---|---|
+| Stacking | **0.9029** | 0.8393 | 0.7709 | **0.9359** | 10.68 |
+| RandomForest | 0.9018 | 0.8378 | 0.7716 | 0.9341 | 0.45 |
+| HistGradientBoosting | 0.8986 | **0.8436** | **0.7806** | 0.9291 | 0.36 |
+| AdaBoost | 0.8970 | 0.8328 | 0.7551 | 0.9241 | 0.38 |
+| GradientBoosting | 0.8956 | 0.8382 | 0.7715 | 0.9283 | 1.56 |
+| Bagging | 0.8891 | 0.8182 | 0.7369 | 0.9226 | 2.64 |
+| LogisticRegression | 0.8792 | 0.7949 | 0.6961 | 0.8969 | 0.02 |
+| KNN | 0.8652 | 0.8020 | 0.7277 | 0.8879 | 0.01 |
+| DecisionTree | 0.8602 | 0.7968 | 0.7041 | 0.8530 | 0.02 |
 
-Statistical tests are used to assess whether observed differences between classifiers are significant.
+### Cost–performance trade-off
 
-Detailed results, figures and interpretations are provided in the project report.
+Stacking achieves the best raw scores, but at a cost ~24× higher than RandomForest and ~500× higher than LogisticRegression (fit time), which must be taken into account when choosing a model in practice. HistGradientBoosting is the best compromise: best balanced_accuracy and minority F1, and the second-lowest fit time among ensembles.
+
+### Effect of class imbalance
+
+Splitting the datasets into *Imbalanced* (< 30% minority, 8 datasets) and *Other* (≥ 30%, 14 datasets) reveals a reordering:
+
+- On *balanced* datasets, **Stacking** dominates all metrics (avg. rank ≈ 2.8–3.2).
+- On *imbalanced* datasets, **HistGradientBoosting** and **RandomForest** take the lead on balanced_accuracy / minority F1, and Stacking drops to 4th place on accuracy (avg. rank 4.06). This suggests that the stacking meta-model, trained on OOF probabilities biased toward the majority class, does not fully transfer to imbalanced regimes.
+
+### Statistical tests
+
+Friedman tests are highly significant for all four metrics (p < 1e-6). Pairwise Wilcoxon with Holm correction shows that:
+
+- All ensembles significantly beat the Decision Tree.
+- No ensemble is **statistically** distinguishable from the best ensemble on accuracy (Stacking vs RF: Holm p = 1.00; vs HistGB: p = 1.00).
+- Stacking significantly outperforms AdaBoost on AUC (Holm p = 0.001) and RandomForest/Bagging on accuracy (Holm p < 0.01).
+
+### scikit-learn agreement
+
+The hand-written ensembles reproduce their scikit-learn counterparts with a maximum absolute difference of 0.019 (accuracy), 0.021 (balanced accuracy) and 0.006 (AUC) across the 8 compared datasets — confirming a correct implementation of Bagging-OOB, Discrete AdaBoost and Stacking.
 
 ---
 
@@ -243,4 +328,3 @@ Detailed results, figures and interpretations are provided in the project report
 
 Lucy MARTIN et Clément CORREIA--PELTIER - 22/11/2026
 Master MALIA — Ensemble Methods and PAC-Bayesian Learning project.
-

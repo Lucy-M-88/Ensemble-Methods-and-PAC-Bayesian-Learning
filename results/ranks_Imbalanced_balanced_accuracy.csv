@@ -1,8 +1,10 @@
 model,0
-AdaBoost,4.8125
-Bagging,5.1875
-DecisionTree,5.625
-GradientBoosting,2.625
-HistGradientBoosting,2.0
-RandomForest,3.625
-Stacking,4.125
+AdaBoost,5.8125
+Bagging,6.1875
+DecisionTree,6.625
+GradientBoosting,3.125
+HistGradientBoosting,2.625
+KNN,5.25
+LogisticRegression,6.25
+RandomForest,4.25
+Stacking,4.875
