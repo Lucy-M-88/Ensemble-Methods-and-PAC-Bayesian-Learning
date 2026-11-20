@@ -1,0 +1,241 @@
+dataset,seed,method,source,test_risk,certificate
+wdbc,0,classical_AdaBoost_stumps,classical,0.040935672514619936,
+wdbc,0,classical_RandomForest,classical,0.052631578947368474,
+wdbc,0,classical_LogReg,classical,0.03508771929824561,
+wdbc,0,classical_Stacking,classical,0.04678362573099415,
+wdbc,0,bound_stumps_A (linear),bound,0.0935672514619883,0.16618947836058856
+wdbc,0,bound_stumps_B (McAllester),bound,0.09941520467836257,0.16411394339335578
+wdbc,0,bound_linear_A (linear),bound,0.05263157894736842,0.16722179275421628
+wdbc,0,bound_linear_B (McAllester),bound,0.05263157894736842,0.17065915277527827
+wdbc,1,classical_AdaBoost_stumps,classical,0.052631578947368474,
+wdbc,1,classical_RandomForest,classical,0.06432748538011701,
+wdbc,1,classical_LogReg,classical,0.06432748538011701,
+wdbc,1,classical_Stacking,classical,0.06432748538011701,
+wdbc,1,bound_stumps_A (linear),bound,0.10526315789473684,0.16908308228257235
+wdbc,1,bound_stumps_B (McAllester),bound,0.10526315789473684,0.1675461907133949
+wdbc,1,bound_linear_A (linear),bound,0.04678362573099415,0.18541151826174515
+wdbc,1,bound_linear_B (McAllester),bound,0.05263157894736842,0.18859041353848757
+wdbc,2,classical_AdaBoost_stumps,classical,0.040935672514619936,
+wdbc,2,classical_RandomForest,classical,0.05847953216374269,
+wdbc,2,classical_LogReg,classical,0.06432748538011701,
+wdbc,2,classical_Stacking,classical,0.052631578947368474,
+wdbc,2,bound_stumps_A (linear),bound,0.08187134502923976,0.18282739518825702
+wdbc,2,bound_stumps_B (McAllester),bound,0.08187134502923976,0.18146039356384097
+wdbc,2,bound_linear_A (linear),bound,0.03508771929824561,0.1735531301454551
+wdbc,2,bound_linear_B (McAllester),bound,0.03508771929824561,0.17686711774347671
+wdbc,3,classical_AdaBoost_stumps,classical,0.0292397660818714,
+wdbc,3,classical_RandomForest,classical,0.040935672514619936,
+wdbc,3,classical_LogReg,classical,0.0292397660818714,
+wdbc,3,classical_Stacking,classical,0.03508771929824561,
+wdbc,3,bound_stumps_A (linear),bound,0.07017543859649122,0.15600206584479243
+wdbc,3,bound_stumps_B (McAllester),bound,0.07602339181286549,0.15427350903785628
+wdbc,3,bound_linear_A (linear),bound,0.03508771929824561,0.16286539577492082
+wdbc,3,bound_linear_B (McAllester),bound,0.03508771929824561,0.1662129196648637
+wdbc,4,classical_AdaBoost_stumps,classical,0.052631578947368474,
+wdbc,4,classical_RandomForest,classical,0.06432748538011701,
+wdbc,4,classical_LogReg,classical,0.0935672514619883,
+wdbc,4,classical_Stacking,classical,0.040935672514619936,
+wdbc,4,bound_stumps_A (linear),bound,0.0935672514619883,0.17315750885210832
+wdbc,4,bound_stumps_B (McAllester),bound,0.10526315789473684,0.1716037681547446
+wdbc,4,bound_linear_A (linear),bound,0.029239766081871343,0.16031160522306082
+wdbc,4,bound_linear_B (McAllester),bound,0.029239766081871343,0.1636592831617591
+heart,0,classical_AdaBoost_stumps,classical,0.2222222222222222,
+heart,0,classical_RandomForest,classical,0.2222222222222222,
+heart,0,classical_LogReg,classical,0.23456790123456794,
+heart,0,classical_Stacking,classical,0.2098765432098766,
+heart,0,bound_stumps_A (linear),bound,0.2716049382716049,0.38201941168685355
+heart,0,bound_stumps_B (McAllester),bound,0.2716049382716049,0.3820528738954222
+heart,0,bound_linear_A (linear),bound,0.18518518518518517,0.3894307402345488
+heart,0,bound_linear_B (McAllester),bound,0.18518518518518517,0.3894892466587979
+heart,1,classical_AdaBoost_stumps,classical,0.14814814814814814,
+heart,1,classical_RandomForest,classical,0.13580246913580252,
+heart,1,classical_LogReg,classical,0.16049382716049387,
+heart,1,classical_Stacking,classical,0.14814814814814814,
+heart,1,bound_stumps_A (linear),bound,0.2716049382716049,0.39809646916337055
+heart,1,bound_stumps_B (McAllester),bound,0.2716049382716049,0.3981047802826287
+heart,1,bound_linear_A (linear),bound,0.12345679012345678,0.41096167228658464
+heart,1,bound_linear_B (McAllester),bound,0.12345679012345678,0.41101257853542317
+heart,2,classical_AdaBoost_stumps,classical,0.28395061728395066,
+heart,2,classical_RandomForest,classical,0.2222222222222222,
+heart,2,classical_LogReg,classical,0.18518518518518523,
+heart,2,classical_Stacking,classical,0.2098765432098766,
+heart,2,bound_stumps_A (linear),bound,0.24691358024691357,0.40783227243817965
+heart,2,bound_stumps_B (McAllester),bound,0.24691358024691357,0.4078645671019009
+heart,2,bound_linear_A (linear),bound,0.18518518518518517,0.3863219953607263
+heart,2,bound_linear_B (McAllester),bound,0.18518518518518517,0.3862342879440052
+heart,3,classical_AdaBoost_stumps,classical,0.13580246913580252,
+heart,3,classical_RandomForest,classical,0.14814814814814814,
+heart,3,classical_LogReg,classical,0.13580246913580252,
+heart,3,classical_Stacking,classical,0.12345679012345678,
+heart,3,bound_stumps_A (linear),bound,0.2962962962962963,0.40511187768356977
+heart,3,bound_stumps_B (McAllester),bound,0.2962962962962963,0.4051333265801601
+heart,3,bound_linear_A (linear),bound,0.12345679012345678,0.41770440103479356
+heart,3,bound_linear_B (McAllester),bound,0.12345679012345678,0.4178451543061101
+heart,4,classical_AdaBoost_stumps,classical,0.14814814814814814,
+heart,4,classical_RandomForest,classical,0.14814814814814814,
+heart,4,classical_LogReg,classical,0.07407407407407407,
+heart,4,classical_Stacking,classical,0.11111111111111116,
+heart,4,bound_stumps_A (linear),bound,0.2716049382716049,0.40122243971610494
+heart,4,bound_stumps_B (McAllester),bound,0.2716049382716049,0.40124993219317406
+heart,4,bound_linear_A (linear),bound,0.08641975308641975,0.41431128364178144
+heart,4,bound_linear_B (McAllester),bound,0.08641975308641975,0.4144624195402765
+iono,0,classical_AdaBoost_stumps,classical,0.05660377358490565,
+iono,0,classical_RandomForest,classical,0.047169811320754707,
+iono,0,classical_LogReg,classical,0.13207547169811318,
+iono,0,classical_Stacking,classical,0.037735849056603765,
+iono,0,bound_stumps_A (linear),bound,0.16037735849056603,0.32706206466064164
+iono,0,bound_stumps_B (McAllester),bound,0.16037735849056603,0.32699817243395846
+iono,0,bound_linear_A (linear),bound,0.11320754716981132,0.3970617286236688
+iono,0,bound_linear_B (McAllester),bound,0.09433962264150944,0.3940305249876103
+iono,1,classical_AdaBoost_stumps,classical,0.09433962264150941,
+iono,1,classical_RandomForest,classical,0.06603773584905659,
+iono,1,classical_LogReg,classical,0.13207547169811318,
+iono,1,classical_Stacking,classical,0.07547169811320753,
+iono,1,bound_stumps_A (linear),bound,0.18867924528301888,0.3277779001361551
+iono,1,bound_stumps_B (McAllester),bound,0.18867924528301888,0.32768771687535014
+iono,1,bound_linear_A (linear),bound,0.1509433962264151,0.37638219189838573
+iono,1,bound_linear_B (McAllester),bound,0.14150943396226415,0.371522410801069
+iono,2,classical_AdaBoost_stumps,classical,0.08490566037735847,
+iono,2,classical_RandomForest,classical,0.10377358490566035,
+iono,2,classical_LogReg,classical,0.12264150943396224,
+iono,2,classical_Stacking,classical,0.09433962264150941,
+iono,2,bound_stumps_A (linear),bound,0.16037735849056603,0.3229557316906732
+iono,2,bound_stumps_B (McAllester),bound,0.16037735849056603,0.3229267749455239
+iono,2,bound_linear_A (linear),bound,0.12264150943396226,0.3926594337559831
+iono,2,bound_linear_B (McAllester),bound,0.12264150943396226,0.38889439365626843
+iono,3,classical_AdaBoost_stumps,classical,0.05660377358490565,
+iono,3,classical_RandomForest,classical,0.07547169811320753,
+iono,3,classical_LogReg,classical,0.12264150943396224,
+iono,3,classical_Stacking,classical,0.06603773584905659,
+iono,3,bound_stumps_A (linear),bound,0.18867924528301888,0.29195008577495496
+iono,3,bound_stumps_B (McAllester),bound,0.18867924528301888,0.2918590277849561
+iono,3,bound_linear_A (linear),bound,0.16981132075471697,0.3568100703607576
+iono,3,bound_linear_B (McAllester),bound,0.16981132075471697,0.3526174285475815
+iono,4,classical_AdaBoost_stumps,classical,0.1132075471698113,
+iono,4,classical_RandomForest,classical,0.08490566037735847,
+iono,4,classical_LogReg,classical,0.160377358490566,
+iono,4,classical_Stacking,classical,0.09433962264150941,
+iono,4,bound_stumps_A (linear),bound,0.20754716981132076,0.2902981214475867
+iono,4,bound_stumps_B (McAllester),bound,0.20754716981132076,0.29023148474615457
+iono,4,bound_linear_A (linear),bound,0.16037735849056603,0.36257677016163553
+iono,4,bound_linear_B (McAllester),bound,0.16037735849056603,0.3582384526497146
+sonar,0,classical_AdaBoost_stumps,classical,0.2063492063492064,
+sonar,0,classical_RandomForest,classical,0.17460317460317465,
+sonar,0,classical_LogReg,classical,0.19047619047619047,
+sonar,0,classical_Stacking,classical,0.2063492063492064,
+sonar,0,bound_stumps_A (linear),bound,0.30158730158730157,0.4678225821711338
+sonar,0,bound_stumps_B (McAllester),bound,0.30158730158730157,0.47230446795321196
+sonar,0,bound_linear_A (linear),bound,0.20634920634920634,0.5274034342177107
+sonar,0,bound_linear_B (McAllester),bound,0.20634920634920634,0.5271223792853389
+sonar,1,classical_AdaBoost_stumps,classical,0.19047619047619047,
+sonar,1,classical_RandomForest,classical,0.19047619047619047,
+sonar,1,classical_LogReg,classical,0.33333333333333337,
+sonar,1,classical_Stacking,classical,0.17460317460317465,
+sonar,1,bound_stumps_A (linear),bound,0.31746031746031744,0.4399527879523972
+sonar,1,bound_stumps_B (McAllester),bound,0.31746031746031744,0.4401463446439799
+sonar,1,bound_linear_A (linear),bound,0.2698412698412698,0.4743109866453407
+sonar,1,bound_linear_B (McAllester),bound,0.2857142857142857,0.4745663496836797
+sonar,2,classical_AdaBoost_stumps,classical,0.12698412698412698,
+sonar,2,classical_RandomForest,classical,0.1428571428571429,
+sonar,2,classical_LogReg,classical,0.2063492063492064,
+sonar,2,classical_Stacking,classical,0.19047619047619047,
+sonar,2,bound_stumps_A (linear),bound,0.2857142857142857,0.4228688589968516
+sonar,2,bound_stumps_B (McAllester),bound,0.2857142857142857,0.4229066644280847
+sonar,2,bound_linear_A (linear),bound,0.2222222222222222,0.5178073225720888
+sonar,2,bound_linear_B (McAllester),bound,0.20634920634920634,0.5177065713283173
+sonar,3,classical_AdaBoost_stumps,classical,0.23809523809523814,
+sonar,3,classical_RandomForest,classical,0.25396825396825395,
+sonar,3,classical_LogReg,classical,0.3015873015873016,
+sonar,3,classical_Stacking,classical,0.23809523809523814,
+sonar,3,bound_stumps_A (linear),bound,0.38095238095238093,0.4635490668270325
+sonar,3,bound_stumps_B (McAllester),bound,0.38095238095238093,0.4634959529314798
+sonar,3,bound_linear_A (linear),bound,0.31746031746031744,0.47391470292236015
+sonar,3,bound_linear_B (McAllester),bound,0.31746031746031744,0.47415784258590044
+sonar,4,classical_AdaBoost_stumps,classical,0.1428571428571429,
+sonar,4,classical_RandomForest,classical,0.19047619047619047,
+sonar,4,classical_LogReg,classical,0.17460317460317465,
+sonar,4,classical_Stacking,classical,0.15873015873015872,
+sonar,4,bound_stumps_A (linear),bound,0.3333333333333333,0.42621606675942897
+sonar,4,bound_stumps_B (McAllester),bound,0.3333333333333333,0.426368389383209
+sonar,4,bound_linear_A (linear),bound,0.2698412698412698,0.5249609180621196
+sonar,4,bound_linear_B (McAllester),bound,0.2698412698412698,0.5249382445892452
+vehicle,0,classical_AdaBoost_stumps,classical,0.047244094488189003,
+vehicle,0,classical_RandomForest,classical,0.03543307086614178,
+vehicle,0,classical_LogReg,classical,0.03937007874015752,
+vehicle,0,classical_Stacking,classical,0.027559055118110187,
+vehicle,0,bound_stumps_A (linear),bound,0.20866141732283464,0.2873568593995037
+vehicle,0,bound_stumps_B (McAllester),bound,0.2047244094488189,0.28745988786362686
+vehicle,0,bound_linear_A (linear),bound,0.06299212598425197,0.3039617653059571
+vehicle,0,bound_linear_B (McAllester),bound,0.05905511811023622,0.2980675512504597
+vehicle,1,classical_AdaBoost_stumps,classical,0.047244094488189003,
+vehicle,1,classical_RandomForest,classical,0.03543307086614178,
+vehicle,1,classical_LogReg,classical,0.03937007874015752,
+vehicle,1,classical_Stacking,classical,0.05905511811023623,
+vehicle,1,bound_stumps_A (linear),bound,0.2047244094488189,0.2864126969824738
+vehicle,1,bound_stumps_B (McAllester),bound,0.19291338582677164,0.2864692861228445
+vehicle,1,bound_linear_A (linear),bound,0.08267716535433071,0.31546491233510887
+vehicle,1,bound_linear_B (McAllester),bound,0.08267716535433071,0.3097432896406186
+vehicle,2,classical_AdaBoost_stumps,classical,0.019685039370078705,
+vehicle,2,classical_RandomForest,classical,0.019685039370078705,
+vehicle,2,classical_LogReg,classical,0.007874015748031482,
+vehicle,2,classical_Stacking,classical,0.027559055118110187,
+vehicle,2,bound_stumps_A (linear),bound,0.18503937007874016,0.29351090515244355
+vehicle,2,bound_stumps_B (McAllester),bound,0.18110236220472442,0.2935697168478043
+vehicle,2,bound_linear_A (linear),bound,0.051181102362204724,0.32406108222118546
+vehicle,2,bound_linear_B (McAllester),bound,0.047244094488188976,0.31929167603257363
+vehicle,3,classical_AdaBoost_stumps,classical,0.027559055118110187,
+vehicle,3,classical_RandomForest,classical,0.019685039370078705,
+vehicle,3,classical_LogReg,classical,0.027559055118110187,
+vehicle,3,classical_Stacking,classical,0.023622047244094446,
+vehicle,3,bound_stumps_A (linear),bound,0.20078740157480315,0.28378961232718786
+vehicle,3,bound_stumps_B (McAllester),bound,0.20078740157480315,0.28385888039821683
+vehicle,3,bound_linear_A (linear),bound,0.05905511811023622,0.3161298895236299
+vehicle,3,bound_linear_B (McAllester),bound,0.05511811023622047,0.3105473768338628
+vehicle,4,classical_AdaBoost_stumps,classical,0.03937007874015752,
+vehicle,4,classical_RandomForest,classical,0.047244094488189003,
+vehicle,4,classical_LogReg,classical,0.027559055118110187,
+vehicle,4,classical_Stacking,classical,0.03543307086614178,
+vehicle,4,bound_stumps_A (linear),bound,0.2283464566929134,0.2714479178878934
+vehicle,4,bound_stumps_B (McAllester),bound,0.2283464566929134,0.2715375511908284
+vehicle,4,bound_linear_A (linear),bound,0.07086614173228346,0.3243756164673651
+vehicle,4,bound_linear_B (McAllester),bound,0.05905511811023622,0.318252200605757
+pima,0,classical_AdaBoost_stumps,classical,0.22510822510822515,
+pima,0,classical_RandomForest,classical,0.22077922077922074,
+pima,0,classical_LogReg,classical,0.22510822510822515,
+pima,0,classical_Stacking,classical,0.21212121212121215,
+pima,0,bound_stumps_A (linear),bound,0.2554112554112554,0.34215132726253505
+pima,0,bound_stumps_B (McAllester),bound,0.2554112554112554,0.34221942606519623
+pima,0,bound_linear_A (linear),bound,0.22943722943722944,0.4012648273083567
+pima,0,bound_linear_B (McAllester),bound,0.22943722943722944,0.40135084666954424
+pima,1,classical_AdaBoost_stumps,classical,0.2683982683982684,
+pima,1,classical_RandomForest,classical,0.2597402597402597,
+pima,1,classical_LogReg,classical,0.23376623376623373,
+pima,1,classical_Stacking,classical,0.2554112554112554,
+pima,1,bound_stumps_A (linear),bound,0.2683982683982684,0.33929549306487655
+pima,1,bound_stumps_B (McAllester),bound,0.2683982683982684,0.33944301588176135
+pima,1,bound_linear_A (linear),bound,0.26406926406926406,0.36818554606689513
+pima,1,bound_linear_B (McAllester),bound,0.26406926406926406,0.36836659406783456
+pima,2,classical_AdaBoost_stumps,classical,0.2640692640692641,
+pima,2,classical_RandomForest,classical,0.2597402597402597,
+pima,2,classical_LogReg,classical,0.22510822510822515,
+pima,2,classical_Stacking,classical,0.24675324675324672,
+pima,2,bound_stumps_A (linear),bound,0.30303030303030304,0.3386651508565341
+pima,2,bound_stumps_B (McAllester),bound,0.30303030303030304,0.3386755475219145
+pima,2,bound_linear_A (linear),bound,0.22943722943722944,0.39132061935923346
+pima,2,bound_linear_B (McAllester),bound,0.23376623376623376,0.3914374523106091
+pima,3,classical_AdaBoost_stumps,classical,0.24242424242424243,
+pima,3,classical_RandomForest,classical,0.23809523809523814,
+pima,3,classical_LogReg,classical,0.2554112554112554,
+pima,3,classical_Stacking,classical,0.25108225108225113,
+pima,3,bound_stumps_A (linear),bound,0.2813852813852814,0.35959859079603074
+pima,3,bound_stumps_B (McAllester),bound,0.2813852813852814,0.3600662594442107
+pima,3,bound_linear_A (linear),bound,0.2554112554112554,0.3860619722905948
+pima,3,bound_linear_B (McAllester),bound,0.24242424242424243,0.3861714723501026
+pima,4,classical_AdaBoost_stumps,classical,0.2857142857142857,
+pima,4,classical_RandomForest,classical,0.2987012987012987,
+pima,4,classical_LogReg,classical,0.2640692640692641,
+pima,4,classical_Stacking,classical,0.303030303030303,
+pima,4,bound_stumps_A (linear),bound,0.27705627705627706,0.34469840311364813
+pima,4,bound_stumps_B (McAllester),bound,0.27705627705627706,0.34472375030236735
+pima,4,bound_linear_A (linear),bound,0.2683982683982684,0.3890676053651629
+pima,4,bound_linear_B (McAllester),bound,0.2683982683982684,0.38920335026982905
