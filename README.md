@@ -23,6 +23,7 @@ Ensemble-Methods-and-PAC-Bayesian-Learning/
 │   ├── analyse_imbalance.py
 │   ├── make_figures.py
 │   ├── dataset_analysis.py
+│   ├── analyse_extra.py
 │   └── pacbayes_tools.py
 │
 ├── data/
@@ -30,18 +31,15 @@ Ensemble-Methods-and-PAC-Bayesian-Learning/
 │
 ├── results/
 │   ├── baseline_results.csv
-│   ├── failed_datasets.csv
-│   ├── sklearn_comparison.csv
-│   ├── mean_performance.csv
-│   ├── friedman_results.csv
-│   ├── wilcoxon_holm_results.csv
+│   ├── ...
 │   └── figures/
+│       └── ...
 │
 ├── requirements.txt
 └── README.md
 ```
 
-*Note: the structure above describes the main files. Additional files may be present in the repository.*
+*Note: the structure above only describes the main files. Additional files (intermediate CSVs, extra figures, logs, etc.) are generated in the `results/` directory by the various analysis scripts and are not exhaustively listed here.*
 
 ---
 
@@ -131,17 +129,7 @@ From the project root:
 python code/benchmark_part1.py
 ```
 
-The benchmark results are saved to:
-
-```text
-results/baseline_results.csv
-```
-
-If any dataset fails to load or be evaluated, the script does **not** crash: the failing datasets and their error messages are written to:
-
-```text
-results/failed_datasets.csv
-```
+The benchmark results are saved to `results/baseline_results.csv`. If any dataset fails to load or be evaluated, the script does **not** crash: the failing datasets and their error messages are written to `results/failed_datasets.csv`.
 
 ### Comparison with scikit-learn
 
@@ -157,13 +145,7 @@ The script trains, on a representative subset of 8 datasets and using the same 5
 - `AdaBoostDiscreteClassifier` ↔ `sklearn.ensemble.AdaBoostClassifier(algorithm="SAMME")`
 - `StackingClassifierCustom` ↔ `sklearn.ensemble.StackingClassifier`
 
-The per-dataset scores and the absolute differences are saved to:
-
-```text
-results/sklearn_comparison.csv
-```
-
-and a summary (mean and max absolute difference on `accuracy`, `balanced_accuracy` and `auc`) is printed to the console.
+The per-dataset scores and the absolute differences are saved to `results/sklearn_comparison.csv`, and a summary (mean and max absolute difference on `accuracy`, `balanced_accuracy` and `auc`) is printed to the console.
 
 ### Statistical analysis
 
@@ -173,7 +155,7 @@ To compute average ranks, the Friedman test and pairwise Wilcoxon signed-rank te
 python code/analyse_results.py
 ```
 
-The generated files include:
+The generated files include (in `results/`):
 
 - `average_ranks_accuracy.csv`
 - `average_ranks_balanced_accuracy.csv`
@@ -196,11 +178,7 @@ Datasets are divided into two groups according to the proportion of the minority
 - **Imbalanced:** minority-class proportion strictly below 30%.
 - **Other:** minority-class proportion greater than or equal to 30%.
 
-The results are saved in:
-
-- `dataset_imbalance.csv`
-- `imbalance_performance.csv`
-- Rank comparison CSV files for each group.
+The results are saved in `results/` (e.g. `dataset_imbalance.csv`, `imbalance_performance.csv`, rank comparison files for each group).
 
 ### Dataset descriptive table
 
@@ -210,11 +188,7 @@ To build the descriptive table of the datasets (number of examples, dimension, n
 python code/dataset_analysis.py
 ```
 
-Results are saved to:
-
-```text
-results/tables/dataset_summary.csv
-```
+Results are saved to `results/tables/dataset_summary.csv`.
 
 ### Generate figures
 
@@ -224,13 +198,7 @@ To generate the figures used in the report, run:
 python code/make_figures.py
 ```
 
-The figures are saved in:
-
-```text
-results/figures/
-```
-
-They include:
+The figures are saved in `results/figures/`. They include:
 
 - Overall model performance comparison.
 - Average model ranks.
@@ -240,10 +208,13 @@ They include:
 ### Complementary analyses (bagging-vs-boosting, stacking-vs-members, CD diagrams)
 
 ```bash
-python code/analyse_extra.py --bvb        # Bagging vs AdaBoost, per dataset
-python code/analyse_extra.py --cd         # Demšar CD diagrams (4 metrics)
-python code/analyse_extra.py --stacking   # Stacking vs its members (~20-30 min)
-python code/analyse_extra.py --all --no-stacking   # everything except the slow group
+python code/analyse_extra.py --bvb                # Bagging vs AdaBoost, per dataset
+python code/analyse_extra.py --cd                 # Demšar CD diagrams (4 metrics)
+python code/analyse_extra.py --stacking           # Stacking vs its members (~20-30 min)
+python code/analyse_extra.py --all --no-stacking  # everything except the slow group
+```
+
+These scripts produce additional CSVs (`bagging_vs_boosting.csv`, `stacking_vs_members.csv`, ...) and figures (`cd_diagram_*.png`, ...) in the `results/` directory.
 
 ---
 
@@ -292,9 +263,7 @@ For exact dependency versions, the project can also provide a `requirements-lock
 
 ## 6. Results
 
-The experimental results show that ensemble methods generally outperform both
-the standalone Decision Tree baseline and the non-tree baselines (Logistic
-Regression, k-NN).
+The experimental results show that ensemble methods generally outperform both the standalone Decision Tree baseline and the non-tree baselines (Logistic Regression, k-NN).
 
 ### Global ranking (mean over 22 datasets)
 
@@ -312,45 +281,30 @@ Regression, k-NN).
 
 ### Cost–performance trade-off
 
-Stacking achieves the best raw scores, but at a cost ~27× higher than
-RandomForest and ~750× higher than LogisticRegression (fit time), which must
-be taken into account when choosing a model in practice. HistGradientBoosting
-is the best compromise: best balanced_accuracy and minority F1, and one of the
-lowest fit times among ensembles.
+Stacking achieves the best raw scores, but at a cost ~27× higher than RandomForest and ~750× higher than LogisticRegression (fit time), which must be taken into account when choosing a model in practice. HistGradientBoosting is the best compromise: best balanced_accuracy and minority F1, and one of the lowest fit times among ensembles.
 
 ### Effect of class imbalance
 
-Splitting the datasets into *Imbalanced* (< 30% minority, 8 datasets) and
-*Other* (≥ 30%, 14 datasets) reveals a reordering:
+Splitting the datasets into *Imbalanced* (< 30% minority, 8 datasets) and *Other* (≥ 30%, 14 datasets) reveals a reordering:
 
 - On *balanced* datasets, **Stacking** dominates all metrics (avg. rank ≈ 2.8–3.2).
-- On *imbalanced* datasets, **HistGradientBoosting** and **RandomForest** take
-  the lead on balanced_accuracy / minority F1, and Stacking drops to 4th place
-  on accuracy (avg. rank 4.06). This suggests that the stacking meta-model,
-  trained on OOF probabilities biased toward the majority class, does not
-  fully transfer to imbalanced regimes.
+- On *imbalanced* datasets, **HistGradientBoosting** and **RandomForest** take the lead on balanced_accuracy / minority F1, and Stacking drops to 4th place on accuracy (avg. rank 4.06). This suggests that the stacking meta-model, trained on OOF probabilities biased toward the majority class, does not fully transfer to imbalanced regimes.
 
 ### Statistical tests
 
-Friedman tests are highly significant for all four metrics (p < 1e-6).
-Pairwise Wilcoxon with Holm correction shows that:
+Friedman tests are highly significant for all four metrics (p < 1e-6). Pairwise Wilcoxon with Holm correction shows that:
 
 - All ensembles significantly beat the Decision Tree.
-- No ensemble is **statistically** distinguishable from the best ensemble on
-  accuracy (Stacking vs RF: Holm p = 1.00; vs HistGB: p = 1.00).
-- Stacking significantly outperforms AdaBoost on AUC (Holm p = 0.001) and
-  Bagging on accuracy / balanced_accuracy / minority_f1 (Holm p < 0.01).
+- No ensemble is **statistically** distinguishable from the best ensemble on accuracy (Stacking vs RF: Holm p = 1.00; vs HistGB: p = 1.00).
+- Stacking significantly outperforms AdaBoost on AUC (Holm p = 0.001) and Bagging on accuracy / balanced_accuracy / minority_f1 (Holm p < 0.01).
 
 ### scikit-learn agreement
 
-The hand-written ensembles reproduce their scikit-learn counterparts with a
-maximum absolute difference of 0.019 (accuracy), 0.021 (balanced accuracy) and
-0.006 (AUC) across the 8 compared datasets — confirming a correct
-implementation of Bagging-OOB, Discrete AdaBoost and Stacking.
+The hand-written ensembles reproduce their scikit-learn counterparts with a maximum absolute difference of 0.019 (accuracy), 0.021 (balanced accuracy) and 0.006 (AUC) across the 8 compared datasets — confirming a correct implementation of Bagging-OOB, Discrete AdaBoost and Stacking.
 
 ---
 
 ## 7. Authors
 
-Lucy MARTIN et Clément CORREIA--PELTIER - 22/11/2026
+Lucy MARTIN et Clément CORREIA--PELTIER - 22/11/2026  
 Master MALIA — Ensemble Methods and PAC-Bayesian Learning project.
